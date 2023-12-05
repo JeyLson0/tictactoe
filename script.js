@@ -1,27 +1,17 @@
 //IIFE
 const gameBoard = (function(){
 
-  let grid = [
-    'a1', 
-    'a2', 
-    'a3', 
-    'b1', 
-    'b2', 
-    'b3', 
-    'c1', 
-    'c2', 
-    'c3'
-  ]
+  let grid = ['1', '2',  '3', '4',  '5', '6', '7', '8', '9' ]
 
   let winCode = [
-    ['a1', 'a2', 'a3'],
-    ['b1', 'b2', 'b3'],
-    ['c1', 'c2', 'c3'],
-    ['a1', 'b1', 'c1'],
-    ['a2', 'b2', 'c2'],
-    ['a3', 'b3', 'c3'],
-    ['a1', 'b2', 'c3'],
-    ['a3', 'b2', 'c1']
+    ['1', '2', '3'],
+    ['4', '5', '6'],
+    ['7', '8', '9'],
+    ['1', '4', '7'],
+    ['2', '5', '8'],
+    ['3', '6', '9'],
+    ['3', '5', '7'],
+    ['1', '5', '9']
   ]
 
   let boardUI = 
@@ -31,41 +21,61 @@ const gameBoard = (function(){
   ${grid[6]} | ${grid[7]} | ${grid[8]} 
   `
 
- let playerOne = player('player one:', 'x', 'player')
- let playerTwo = player('player two', 'o', 'player')
+ let playerOne = player('player one', 'x')
+ let playerTwo = player('player two', 'o')
  
   function play() {
     let rounds = 9
+    let gameEnd;
+
+    function result(){
+      if (grid.length == 0) {
+        console.log('No wins. Try again')
+        return gameEnd = true
+      }
+  
+      if (playerOne.playerWin == true) {
+        console.log('player one: win')
+        return gameEnd = true
+      }
+  
+      if (playerTwo.playerWin == true) {
+        console.log('player two: win')
+        return gameEnd = true
+      }
+    }
 
     for (let i = 0; i < rounds; i++) {
+
       playerOne.getCell()
       evaluateWin(playerOne)
+      result()
 
-      if (playerOne.playerStatus == true) {
-        return console.log('player one: win')
+      if(gameEnd == true) {
+        break
       }
 
       playerTwo.getCell()
       evaluateWin(playerTwo)
+      result()
 
-      if (playerTwo.playerStatus == true) {
-        return console.log('player two: win')
+      if(gameEnd == true) {
+        break
       }
+
     }
-    
 
   }
 
   function evaluateWin(player) {
+
     let playerArray = player.playerChoice
     console.log(playerArray)
     let counter = 0;
 
-    for (let i = 0; i < winCode.length; i++) {
+     for (let i = 0; i < winCode.length; i++) {
       let winArray = winCode[i];
-      /* console.log(winArray) */
       let filtered = playerArray.filter((value) => winArray.includes(value))
-      /* console.log(filtered) */
       
       if (winArray.length === filtered.length) {
         for (let j = 0; j < winArray.length; j++) {
@@ -78,63 +88,26 @@ const gameBoard = (function(){
       }
 
       if (counter == 3) {
-        return player.playerStatus = true
+        return player.playerWin = true
       }
 
     }
 
   }
 
-
   return {play, evaluateWin, grid, boardUI, playerOne, playerTwo}
 })();
 
 
-
-
-
-
-
-//factory function
-function player(name, sign, status) {
+//Player factory function
+function player(name, sign) {
   let playerName = name;
   let playerSign = sign;
   let playerChoice = [];
-  let playerStatus = status;
-  let cell;
-  let match;
 
-  function declareSign(sign) {
-    if(sign == 'x' || sign == 'X') {
-      this.playerSign = 'x'
-      return console.log(this.playerSign)
-    }
-    if(sign == 'o' || sign == 'O') {
-      this.playerSign = 'o'
-      return console.log(this.playerSign)
-    }
-    if (sign != 'o' || sign != 'x') {
-      this.playerSign = undefined
-      return console.log('Error: please choose between x or o')
-    }
-  }
-
-  function declareStatus(stat) {
-    if (stat == 'player') {
-      this.playerStatus = 'player';
-      return console.log(`status set to 'player' `)
-    }
-    if (stat == 'comp') {
-      this.playerStatus = 'player';
-      return console.log(`status set to 'computer' `)
-    }
-    if (stat != 'comp' || stat != 'player') {
-      return console.log('Error status')
-    }
-  }
-
+  //function ask for users input, input passed to findMatch()
   function getCell() {
-    cell = prompt(
+    let cell = prompt(
     `
     ${playerName}
     ${gameBoard.boardUI}
@@ -142,26 +115,28 @@ function player(name, sign, status) {
      `
      )
 
-    findMatch();
+    findMatch(cell);
   }
 
-  function findMatch() {
-    match = gameBoard.grid.find(element => element == cell)
-    if (cell == null) {
-      return
-    }
-    evaluate()
+  //function takes 'cell' private variable. finds 'input' in gameBoard.grid which returns the first value that passes the cb function
+  function findMatch(cell) {
+    let match = gameBoard.grid.find(element => element == cell)
+    evaluate(match)
   }
 
-  function evaluate() {
+  //function takes the 'matched' value from the grid.
+  function evaluate(match) {
+    
+    //if true, that value is pushed to playerChoice array, get the index of that value and use that index to change gameBoard.boardUI and splice() it from grid array
     if (match) {
       playerChoice.push(match)
       let index = gameBoard.grid.indexOf(match)
-      gameBoard.boardUI = gameBoard.boardUI.replace(gameBoard.grid[index], ` ${playerSign}`)
+      gameBoard.boardUI = gameBoard.boardUI.replace(gameBoard.grid[index], `${playerSign}`)
       gameBoard.grid.splice(index, 1)
       console.log(gameBoard.boardUI)
     }
 
+    //if false, initialize another input to 'cell' and loop to findMatch()
     if (!match) {
       alert('invalid')
 
@@ -172,40 +147,32 @@ function player(name, sign, status) {
         Place your input:
          `
          )
-         
-      if (cell == null) {
-        return
-      }
-      findMatch()
+      findMatch(cell)
     }
   }
-  
-
-  return {declareSign, declareStatus, getCell, playerChoice, playerStatus, playerSign, playerName}
+  return {getCell, playerChoice , playerSign, playerName}
 
 }
 
-
 const gameSettings = (function(){
 
-  let playerPropError;
+  function resetGame() {
+    gameBoard.grid = ['1', '2',  '3', '4',  '5', '6', '7', '8', '9' ]
 
-  function checkPlayer(player) {
-    for (const property in player) {
-      if (player[property] == undefined) {
-        playerPropError = true;
-        return console.log(`please set ${property} property on  playerName ${player.playerName}`)
-      }
-    }
+    gameBoard.playerOne.playerChoice.length = 0
+    gameBoard.playerTwo.playerChoice.length = 0
+    gameBoard.playerOne.playerSign = undefined
+    gameBoard.playerTwo.playerSign = undefined
+    gameBoard.playerOne.playerWin = undefined
+    gameBoard.playerTwo.playerWin = undefined
+
+    gameBoard.boardUI =   `
+    ${gameBoard.grid[0]} | ${gameBoard.grid[1]} | ${gameBoard.grid[2]} 
+    ${gameBoard.grid[3]} | ${gameBoard.grid[4]} | ${gameBoard.grid[5]} 
+    ${gameBoard.grid[6]} | ${gameBoard.grid[7]} | ${gameBoard.grid[8]} 
+    `
   }
 
-
-
-
-  return {checkPlayer, playerPropError}
-
+  return {resetGame}
 })();
-
-
-
 
