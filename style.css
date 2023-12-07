@@ -1,0 +1,145 @@
+/* CSS reset */
+*, *::before, *::after{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+body{
+    min-height: 100vh;
+}
+
+img, picture, svg, video{
+    display: block;
+    max-width: 100%;
+}
+
+input[type="button"] {
+
+}
+
+/*Code starts here */
+
+*{
+    font-family: 'Tilt Neon', sans-serif;;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+}
+
+.header-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 100vw;
+    margin: 2rem 0;
+}
+
+
+.header-title p{
+    color: white;
+    font-size: 4rem;
+    text-shadow:  yellow 1px 1px 10px;
+}
+
+.game-alert {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.game-alert p{
+    font-size: 2rem;
+    color: white;
+}
+
+.grid-wrapper{
+    display: flex;
+    flex-direction: column;
+    background-color: grey;
+    margin-bottom: 4rem;
+    min-width: 350px;
+    height: 450px;
+    border-radius: 5%;
+
+}
+
+.grid {
+    display: grid;
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    border-radius: inherit;
+
+}
+
+#cell-1, #cell-2, #cell-3{
+    grid-row: 1/2;
+}
+
+#cell-4, #cell-5, #cell-6{
+    grid-row: 2/3;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    
+}
+
+#cell-7, #cell-8, #cell-9 {
+    grid-row: 3/4;
+}
+
+#cell-2, #cell-5, #cell-8{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+
+.cells {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.cell-btn {
+    border: 1px solid black;
+    width: 6rem;
+    height: 6rem;
+}
+
+img {
+    width: 6rem;
+}
+
+.cell-btn:hover{
+    background-color: grey;
+}
+
+
+
+
+
+
+@media all and (min-width: 600px){
+    body{
+        background-color: rgb(2, 2, 154);
+    }
+
+
+}
+
+@media all and (min-width: 900px) {
+    body{
+        background-color: rgb(130, 11, 11);
+    }
+
+
+
+}

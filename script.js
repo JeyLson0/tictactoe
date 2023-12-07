@@ -176,3 +176,22 @@ const gameSettings = (function(){
   return {resetGame}
 })();
 
+
+const DOM = (function(){
+
+  let cellButton = document.querySelectorAll(".cell-btn")
+  let cellInput = document.querySelectorAll("input[type='hidden']")
+  let input;
+
+  cellButton.forEach((element) => {
+    element.addEventListener('click', (event) => {
+      return input = element.firstChild.value
+    })
+  })
+
+
+
+  return {cellButton, cellInput}
+})();
+
+
