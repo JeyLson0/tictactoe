@@ -12,7 +12,6 @@ let DOM = (function(){
   const dbCrossWin = "assets/imgs/db-cross-win.svg";
   const dbCircleWin = "assets/imgs/db-circle-win.svg";
 
-
   return {
     cellButton,
     cellInput, 
@@ -58,13 +57,14 @@ const gameBoard = (function(){
  
   function result(){
     ++rounds
+
+    console.log(rounds)
     if (playerOne.playerWin == true) {
       DOM.playerNotif.textContent = `${playerOne.playerName} Win!`
       DOM.playButton.setAttribute('value', 'Try Again')
       DOM.playButton.classList.remove('disabled')
       DOM.playButton.removeEventListener('click', gameSettings.startGame)
       DOM.playButton.addEventListener('click', gameSettings.resetGame)
-      return rounds = 0;
     }
 
     if (playerTwo.playerWin == true) {
@@ -73,33 +73,27 @@ const gameBoard = (function(){
       DOM.playButton.classList.remove('disabled')
       DOM.playButton.removeEventListener('click', gameSettings.startGame)
       DOM.playButton.addEventListener('click', gameSettings.resetGame)
-      return rounds = 0;
     }
 
-    if (rounds == 9) {
-      DOM.playerNotif.textContent = 'No wins. Try again'
+    if (gameBoard.grid.length == 0 && playerTwo.playerWin == false && playerOne.playerWin == false) {
+      DOM.playerNotif.textContent = 'Draw'
       DOM.playButton.setAttribute('value', 'Try Again')
       DOM.playButton.classList.remove('disabled')
       DOM.playButton.removeEventListener('click', gameSettings.startGame)
       DOM.playButton.addEventListener('click', gameSettings.resetGame)
-      return rounds = 0;
     }
-
+   
   }
 
-  return {result, grid, boardUI, playerOne, playerTwo, winCode, gameStatus}
+  return {result, grid, boardUI, playerOne, playerTwo, winCode, gameStatus, rounds}
 })();
 
 
 const gameSettings = (function(){
 
   function resetGame() {
-    gameBoard.grid = ['1', '2',  '3', '4',  '5', '6', '7', '8', '9' ];
-
-    gameBoard.playerOne.playerChoice.length = 0;
-    gameBoard.playerTwo.playerChoice.length = 0;
-    gameBoard.gameStatus = true;
-  
+    gameBoard.grid = ['1', '2',  '3', '4',  '5', '6', '7', '8', '9'];
+    DOM.playerNotif.textContent = ''
 
     if(gameBoard.playerOne.playerWin) {
       gameBoard.playerTwo.getCell()
@@ -109,6 +103,17 @@ const gameSettings = (function(){
       gameBoard.playerOne.getCell()
     }
 
+    if(!gameBoard.playerOne.playerWin && !gameBoard.playerTwo.playerWin) {
+      if (gameBoard.playerOne.playerChoice.length > gameBoard.playerTwo.playerChoice.length) {
+        gameBoard.playerTwo.getCell()
+      } else {
+        gameBoard.playerOne.getCell()
+      }
+    }
+
+    gameBoard.playerOne.playerChoice.length = 0;
+    gameBoard.playerTwo.playerChoice.length = 0;
+    gameBoard.gameStatus = true;
     gameBoard.playerOne.playerWin = false
     gameBoard.playerTwo.playerWin = false
 
@@ -124,7 +129,6 @@ const gameSettings = (function(){
     })
 
     DOM.playButton.classList.add('disabled')
-
   }
 
 
@@ -160,7 +164,7 @@ function player(name, sign, hover, playerImg, playerImgWin) {
   let imgSign = playerImg
   let imgSignWin = playerImgWin
   let playerChoice = [];
-  let playerWin;
+  let playerWin = false
   let playerObj; //reference to specific player obj
 
   function getCell() {
@@ -168,7 +172,6 @@ function player(name, sign, hover, playerImg, playerImgWin) {
     if(gameBoard.gameStatus == false){
       return console.log('game ended')
     }
-
     if(gameBoard.gameStatus == true) {
       DOM.cellButton.forEach(element => {
         playerObj = this;
@@ -177,7 +180,6 @@ function player(name, sign, hover, playerImg, playerImgWin) {
         element.addEventListener('mouseout', hoverOutCell)
       });
     }
-    
   }
 
   function hoverOutCell() {
@@ -187,18 +189,15 @@ function player(name, sign, hover, playerImg, playerImgWin) {
     } else {
       imgContainer.setAttribute('src', '')
     }
-
   }
 
   function hoverCell(){
-
     let imgContainer = this.children[1];
     if (imgContainer.className == 'assigned-cell')  {
       return 
     } else {
       imgContainer.setAttribute('src', hoverUI)
     }
-
   }
 
   function getDOMInput() {
@@ -212,30 +211,25 @@ function player(name, sign, hover, playerImg, playerImgWin) {
   }
 
   function evaluate(match) {
-    
     if (match) {
       playerObj.playerChoice.push(match)
       let index = gameBoard.grid.indexOf(match)
       let DOMIndex = match - 1
       gameBoard.boardUI = gameBoard.boardUI.replace(gameBoard.grid[index], `${playerSign}`)
       gameBoard.grid.splice(index, 1)
-
       DOM.imgPlayerContainer[DOMIndex].setAttribute('src', imgSign)
       DOM.imgPlayerContainer[DOMIndex].className = 'assigned-cell'
-        
       evaluateWin()
       gameBoard.result()
-    
       DOM.cellButton.forEach(element => {
         element.removeEventListener('click', getDOMInput)
         element.removeEventListener('mouseover', hoverCell)
         element.removeEventListener('mouseout', hoverOutCell)
       });
-
-      if (playerObj.playerWin == false || playerObj.playerWin == undefined) {
+      
+      if (gameBoard.grid.length > 0 && gameBoard.playerOne.playerWin == false && gameBoard.playerTwo.playerWin == false ) {
         gameSettings.switchPlayer(playerObj.playerSign)
       } 
-      
     }
 
     if (!match) {
@@ -263,8 +257,6 @@ function player(name, sign, hover, playerImg, playerImgWin) {
           }
         }
       }
-
-    
 
     }
 

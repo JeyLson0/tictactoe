@@ -51,8 +51,8 @@ body{
 
 .game-alert {
     display: flex;
-    height: 0.5rem;
-    margin-bottom: 4rem;
+    height: 3rem;
+    margin-bottom: 2rem;
     text-shadow:  rgb(255, 255, 248) 1px 1px 10px;
 }
 
