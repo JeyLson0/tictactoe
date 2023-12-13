@@ -38,19 +38,22 @@ body{
     align-items: center;
     height: 100px;
     width: 100vw;
-    margin: 2rem 0;
+    margin: 1rem 0 2rem;
 }
 
 
 .header-title p{
     color: white;
     font-size: 4rem;
-    text-shadow:  yellow 1px 1px 10px;
+    text-shadow:  rgb(255, 240, 122) 1px 1px 10px;
+
 }
 
 .game-alert {
     display: flex;
-    margin-bottom: 1rem;
+    height: 0.5rem;
+    margin-bottom: 4rem;
+    text-shadow:  rgb(255, 255, 248) 1px 1px 10px;
 }
 
 .game-alert p{
@@ -61,17 +64,14 @@ body{
 .grid-wrapper{
     display: flex;
     flex-direction: column;
-    background-color: grey;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     min-width: 350px;
     height: 450px;
-    border-radius: 5%;
 
 }
 
 .grid {
     display: grid;
-    background-color: white;
     height: 100%;
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
@@ -86,8 +86,8 @@ body{
 
 #cell-4, #cell-5, #cell-6{
     grid-row: 2/3;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
+    border-top: 0.4rem solid  rgb(255, 255, 255);;
+    border-bottom: 0.4rem solid rgb(255, 255, 255);
     
 }
 
@@ -96,8 +96,8 @@ body{
 }
 
 #cell-2, #cell-5, #cell-8{
-    border-left: 1px solid black;
-    border-right: 1px solid black;
+    border-left: 0.4rem solid rgb(255, 255, 255);
+    border-right: 0.4rem solid rgb(255, 255, 255);
 }
 
 
@@ -105,11 +105,11 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .cell-btn {
     border: 1px solid black;
+    border-radius: 1rem;
     width: 6rem;
     height: 6rem;
 }
@@ -118,18 +118,32 @@ img {
     width: 6rem;
 }
 
+img[src=""]{
+    display: none;
+}
+
 .cell-btn:hover{
     background-color: grey;
 }
 
+.game-btn input{
+    font-size: 2rem;
+    border-radius: 1rem;
+    width: 10rem;
+    height: 4rem;
+}
+
+.disabled{
+    display: none;
+}
+
+.UI-button:active{
+    background-color: rgb(147, 147, 147);
+}
 
 
-
-
-
-@media all and (min-width: 600px){
+/* @media all and (min-width: 600px){
     body{
-        background-color: rgb(2, 2, 154);
     }
 
 
@@ -137,9 +151,6 @@ img {
 
 @media all and (min-width: 900px) {
     body{
-        background-color: rgb(130, 11, 11);
     }
 
-
-
-}
+} */
